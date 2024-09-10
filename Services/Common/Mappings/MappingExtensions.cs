@@ -1,0 +1,19 @@
+﻿using AutoMapper.QueryableExtensions;
+using WebApi.Services.Common.Models;
+using Microsoft.EntityFrameworkCore;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
+
+
+namespace WebApi.Services.Common.Mappings;
+
+public static class MappingExtensions
+{
+    public static Task<PaginatedList<TDestination>> PaginatedListAsync<TDestination>(this IQueryable<TDestination> queryable, int pageNumber, int pageSize) where TDestination : class
+        => PaginatedList<TDestination>.CreateAsync(queryable.AsNoTracking(), pageNumber, pageSize);
+
+    public static Task<List<TDestination>> ProjectToListAsync<TDestination>(this IQueryable queryable, IConfigurationProvider configuration) where TDestination : class
+        => queryable.ProjectTo<TDestination>(configuration).AsNoTracking().ToListAsync();
+    
+    public static Task<List<TDestination>> ToListAsync<TDestination>(this IQueryable queryable, IConfigurationProvider configuration) where TDestination : class
+        => queryable.ProjectTo<TDestination>(configuration).AsNoTracking().ToListAsync();
+}
