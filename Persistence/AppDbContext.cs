@@ -28,9 +28,10 @@ public class AppDbContext : DbContext
     public DbSet<ProductCategory> Categories => Set<ProductCategory>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Order> Orders => Set<Order>();
+    public DbSet<ReferralCode> ReferralCodes => Set<ReferralCode>();
     public DbSet<ProductExtra> ProductExtras => Set<ProductExtra>();
     public DbSet<ProductExtraItem> ProductExtraItems => Set<ProductExtraItem>();
-    public DbSet<WhatsappVerification> WhatsappVerifications => Set<WhatsappVerification>();
+    public DbSet<VerificationCode> VerificationCodes => Set<VerificationCode>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<Reward> Rewards => Set<Reward>();
     public DbSet<RewardSystem> RewardsSystem => Set<RewardSystem>();

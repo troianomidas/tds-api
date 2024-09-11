@@ -88,7 +88,7 @@ public class Order : BaseStoreEntity
         TotalValue += DeliveryValue;
 
         if (DiscountValue > 0 && DiscountType == OrderDiscountTypeConst.Percentage)
-            TotalValue -= (DiscountValue * TotalValue) / 100;
+            TotalValue -= DiscountValue * TotalValue / 100;
         if (DiscountValue > 0 && DiscountType == OrderDiscountTypeConst.Value)
             TotalValue -= DiscountValue;
     }

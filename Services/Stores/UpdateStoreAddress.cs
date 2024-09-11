@@ -14,7 +14,8 @@ public record UpdateStoreAddressRequest : IRequest<bool>
     public string? Line2 { get; set; }
     public string? Number { get; set; }
     public string? Neighborhood { get; set; }
-    public string? CityState { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
 }
 
 public class UpdateStoreAddressRequestHandler : IRequestHandler<UpdateStoreAddressRequest, bool>
@@ -35,11 +36,8 @@ public class UpdateStoreAddressRequestHandler : IRequestHandler<UpdateStoreAddre
         if (storeDb == null)
             throw new InvalidOperationException("Loja nao encontrada");
 
-        var address = new StoreAddress(request.Zipcode, request.Line1, request.Number, request.Neighborhood, request.CityState)
-        {
-            Id = storeDb.Address?.Id ?? 0,
-            Line2 = request.Line2
-        };
+        var address = new StoreAddress(request.Zipcode, request.State, request.City,
+            request.Neighborhood, request.Line1, request.Number, request.Line2);
 
         storeDb.Address = address;
 

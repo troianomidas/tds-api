@@ -1,12 +1,12 @@
 using WebApi.Domain.Constants;
 using WebApi.Domain.Exceptions;
-using WebApi.Integrations.Queues;
+// using WebApi.Integrations.Queues;
 using WebApi.Services.Subscriptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.Accounts;
 
 [AllowAnonymous]
 [ApiController]
@@ -14,11 +14,16 @@ namespace WebApi.Controllers;
 public class SubscriptionController : ControllerBase
 {
     private readonly ISender _sender;
-    private readonly IQueue _queue;
+    // private readonly IQueue _queue;
     
-    public SubscriptionController(ISender sender, IQueue queue)
+    // public SubscriptionController(ISender sender, IQueue queue)
+    // {
+    //     _queue = queue;
+    //     _sender = sender;
+    // }
+    
+    public SubscriptionController(ISender sender)
     {
-        _queue = queue;
         _sender = sender;
     }
     
@@ -71,7 +76,7 @@ public class SubscriptionController : ControllerBase
     [Route("billing/webhook")]
     public async Task<IActionResult> Webhook([FromForm] Guid notification)
     {
-        await _queue.SendMessageAsync(QueueConst.WebhookSubscriptionBilling, notification.ToString());
+        // await _queue.SendMessageAsync(QueueConst.WebhookSubscriptionBilling, notification.ToString());
         return Ok();
     }
 }

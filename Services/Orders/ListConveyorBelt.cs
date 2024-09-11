@@ -26,10 +26,12 @@ public class ListConveyorBeltRequestHandler : IRequestHandler<ListConveyorBeltRe
         if (request.StoreId < 1)
             throw new InvalidOperationException("StoreId is required.");
 
-        return await _context.Orders.Where(x => x.StoreId == request.StoreId && new List<int>{OrderStatusConst.Pending,OrderStatusConst.Prepare,OrderStatusConst.Delivery}.Contains(x.Status))
+        var a =  await _context.Orders.Where(x => x.StoreId == request.StoreId && new List<int>{OrderStatusConst.Pending,OrderStatusConst.Prepare,OrderStatusConst.Delivery}.Contains(x.Status))
             .Include(x=> x.ShippingAddress)
             .Include(x=> x.Collaborator)
             .Include(x=>x.Items)
             .ToListAsync(cancellationToken);
+
+        return a;
     }
 }

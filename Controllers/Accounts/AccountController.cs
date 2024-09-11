@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services.Accounts;
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.Accounts;
 
 [AllowAnonymous]
 [ApiController]
@@ -12,6 +12,22 @@ public class AccountController : ControllerBase
 {
     private readonly ISender _sender;
     public AccountController(ISender sender) => _sender = sender;
+
+    [HttpGet]
+    public async Task<IActionResult> DocumentExists(string? document)
+    {
+        try
+        {
+            return Ok(await _sender.Send(new DocumentExists
+            {
+                Document = document
+            }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] Login request)
@@ -25,33 +41,7 @@ public class AccountController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    
-    [HttpPost]
-    public async Task<IActionResult> PreRegister([FromBody] PreRegister request)
-    {
-        try
-        {
-            return Ok(await _sender.Send(request));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    
-    [HttpPost]
-    public async Task<IActionResult> Register([FromBody] Register request)
-    {
-        try
-        {
-            return Ok(await _sender.Send(request));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    
+
     [HttpPost]
     public async Task<IActionResult> GetUserByLogin([FromBody] GetUserByLogin request)
     {
@@ -62,32 +52,6 @@ public class AccountController : ControllerBase
         catch (InvalidOperationException e)
         {
             return NotFound(e.Message);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    
-    [HttpPost]
-    public async Task<IActionResult> ValidateVerification([FromBody] ValidationVerification request)
-    {
-        try
-        {
-            return Ok(await _sender.Send(request));
-        }
-        catch (InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    
-    [HttpPost]
-    public async Task<IActionResult> ResendVerification([FromBody] ResendVerification request)
-    {
-        try
-        {
-            return Ok(await _sender.Send(request));
         }
         catch (Exception e)
         {

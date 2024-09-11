@@ -13,14 +13,43 @@ public class Store : BaseEntity
         
     }
 
-    public Store(int userId, string userExternalId)
+    public Store(string? name, string? phone, string? ownerName, string? ownerDocument, int? referralCodeId, decimal planAmount)
     {
-        UserId = userId;
-        Name = userExternalId;
-        ExternalId = userExternalId;
-        Phone = "00";
-        Status = StoreStatusConst.Pending;
-        Hostname = userExternalId;
+        if (string.IsNullOrEmpty(name))
+            throw new InvalidOperationException("Preencha o nome da loja.");
+
+        if (name.Length is < 4 or > 45)
+            throw new InvalidOperationException("O nome da loja deve ter entre 4 e 45 caracteres.");
+
+        if (string.IsNullOrEmpty(phone))
+            throw new InvalidOperationException("Número de telefone inválido.");
+
+        if (phone.Trim().Length < 14 || phone.Trim().Length > 20)
+            throw new InvalidOperationException("Número de telefone inválido.");
+        
+        if (string.IsNullOrEmpty(ownerName))
+            throw new InvalidOperationException("Preencha o nome completo.");
+
+        if (ownerName.Split(" ").Length < 2)
+            throw new InvalidOperationException("Preencha o nome completo.");
+
+        if (ownerName.Length > 65)
+            throw new InvalidOperationException("O nome completo deve ter no máximo 65 caracteres.");
+
+        if (string.IsNullOrEmpty(ownerDocument))
+            throw new InvalidOperationException("Preencha CPF do responsável legal.");
+
+        if (!CpfCnpj.IsCpfValid(ownerDocument))
+            throw new InvalidOperationException("Informe um CPF válido.");
+        
+        ExternalId = Guid.NewGuid().ToString();
+        Name = name.Trim();
+        Phone = phone;
+        OwnerName = ownerName.Trim();
+        OwnerDocument = ownerDocument;
+        Status = StoreStatusConst.Active;
+        
+        GenerateHostname();
         
         StoreDelivery = new StoreDelivery(Id, false, (decimal)7.00)
         {
@@ -34,13 +63,13 @@ public class Store : BaseEntity
 
         StoreSettings = new StoreSettings
         {
-            ExternalId = userExternalId,
+            ExternalId = ExternalId,
             FilterOrderDateType = 1,
             FilterOrderSortAsc = 2,
             FilterOrderSortType = 1
         };
 
-        Subscription = new Subscription(Id, 4);
+        Subscription = new Subscription(Id, referralCodeId, planAmount);
         
         StorePaymentMethods = new List<StorePaymentMethod>();
         StorePaymentMethods.Add(new StorePaymentMethod(Id, 2));
@@ -59,8 +88,7 @@ public class Store : BaseEntity
                      DayOfWeek.Sunday,
                  })
         {
-            OpeningHours.Add(new OpeningHour(Id, dayOfWeek.ToString(), "08:00", "13:00", 0, 1));
-            OpeningHours.Add(new OpeningHour(Id, dayOfWeek.ToString(), "16:00", "23:00", 0, 2));
+            OpeningHours.Add(new OpeningHour(Id, dayOfWeek.ToString(), "08:00", "23:00", 0, 1));
         }
 
         Announcements = new List<Announcement>();
@@ -100,6 +128,8 @@ public class Store : BaseEntity
     public string? Category { get; set; }
     public string? LogoUrl { get; set; }
     public string? BannerUrl { get; set; }
+    public string? OwnerName { get; set; }
+    public string? OwnerDocument { get; set; }
     public int Status { get; set; }
     public int ReviewCount { get; set; }
     public double ReviewRate { get; set; }
