@@ -35,6 +35,8 @@ public class LoginHandler : IRequestHandler<Login, AuthUserResponse?>
             throw new InvalidOperationException("User or Store not found");
         
         store.User.LastAccessAt = DateTime.Now;
+
+        await _context.SaveChangesAsync(cancellationToken);
         
         return new AuthUserResponse
         {

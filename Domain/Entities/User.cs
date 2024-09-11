@@ -10,70 +10,31 @@ public class User : BaseEntity
     {
         
     }
-    
-    public User(string? name, string? whatsappNumber, string? pass1, string? pass2)
+
+    public User(string? email, string? pass, string? publicIp)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new InvalidOperationException("Informe seu nome completo.");
+        if (string.IsNullOrEmpty(email))
+            throw new InvalidOperationException("Preencha o e-mail.", new Exception("email"));
 
-        if (name.Split(" ").Count() < 2)
-            throw new InvalidOperationException("Informe seu nome completo.");
-        
-        if (name.Trim().Length > 65)
-            throw new InvalidOperationException("Informe uma senha com no máximo 65 caracteres.");
-        
-        if (string.IsNullOrEmpty(whatsappNumber))
-            throw new InvalidOperationException("Informe um número de WhatsApp válido.");
-        
-        if (whatsappNumber.Trim().Length < 14 || whatsappNumber.Trim().Length > 20)
-            throw new InvalidOperationException("Informe um número de WhatsApp válido.");
-        
-        if (string.IsNullOrEmpty(pass1) || pass1.Trim().Length < 8)
-            throw new InvalidOperationException("Informe uma senha com no mínimo 8 caracteres.");
+        if (!email.Contains("@") || !email.Contains("."))
+            throw new InvalidOperationException("Informe um e-mail válido.", new Exception("email"));
 
-        if (pass1.Trim().Length > 45)
-            throw new InvalidOperationException("Informe uma senha com no máximo 45 caracteres.");
+        if (string.IsNullOrEmpty(pass) || pass.Trim().Length < 8)
+            throw new InvalidOperationException("Informe uma senha com no mínimo 8 caracteres.", new Exception("pass"));
 
-        if (pass2?.Trim() != pass1.Trim())
-            throw new InvalidOperationException("As senhas não são iguais.");
+        if (pass.Trim().Length > 45)
+            throw new InvalidOperationException("Informe uma senha com no máximo 45 caracteres.", new Exception("pass"));
         
-        WhatsappNumber = whatsappNumber;
-        Password = pass1;
-        ExternalId = Guid.NewGuid().ToString();
-        Name = name;
-    }
-
-    public User(string? name, string? document, string? email)
-    {
-        if (string.IsNullOrEmpty(name))
-            throw new InvalidOperationException("Por favor, informe seu nome completo.");
-
-        if (name.Split(" ").Count() < 2)
-            throw new InvalidOperationException("Por favor, informe seu nome completo.");
-        
-        if (name.Trim().Length > 65)
-            throw new InvalidOperationException("Por favor, informe uma senha com no máximo 65 caracteres.");
-        
-        if (string.IsNullOrEmpty(email) || (!email.Contains("@") || !email.Contains(".com")))
-            throw new InvalidOperationException("Por favor, informe um e-mail válido.");
- 
-        if (string.IsNullOrEmpty(document))
-            throw new InvalidOperationException("Por favor, informe o CPF do responsável legal.");
-        
-        if (!CpfCnpj.IsCpfValid(document))
-            throw new InvalidOperationException("Por favor, informe um CPF válido.");
-        
-        Name = name;
-        Document = document;
-        Email = email;
+        Email = email.Trim();
+        Password = pass;
+        PublicIp = publicIp;
+        CreatedAt = DateTime.Now;
+        LastAccessAt = DateTime.Now;
     }
     
-    public string? Name { get; set; }
-    public string? WhatsappNumber { get; set; }
+    public string? ExternalId { get; set; }
     public string? Email { get; set; }
     public string? Password { get; set; }
-    public string? ExternalId { get; set; }
-    public string? Document { get; set; }
     public DateTime? LastAccessAt { get; set; }
     public string? PublicIp { get; set; }
 }

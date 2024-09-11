@@ -2,7 +2,7 @@ using Azure.Storage.Queues;
 using WebApi.Domain.Constants;
 using WebApi.Domain.Entities;
 using WebApi.Domain.Exceptions;
-using WebApi.Integrations.Queues;
+// using WebApi.Integrations.Queues;
 using WebApi.Integrations.Serverless;
 using WebApi.Persistence;
 using MediatR;

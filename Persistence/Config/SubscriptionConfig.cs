@@ -10,6 +10,5 @@ public class SubscriptionConfig : IEntityTypeConfiguration<Subscription>
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
         builder.ToTable("subscriptions");
-        builder.Property(a => a.CreatedAt).HasDefaultValueSql("now()");
     }
 }

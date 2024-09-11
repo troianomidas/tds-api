@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Integrations.Queues;
+// using WebApi.Integrations.Queues;
 using WebApi.Integrations.Serverless;
 using WebApi.Persistence;
 using WebApi.Services.Common.Behaviours;
@@ -32,7 +32,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddScoped<TokenService, TokenService>();
-builder.Services.AddScoped<IQueue, StorageQueue>();
+// builder.Services.AddScoped<IQueue, StorageQueue>();
 builder.Services.AddScoped<IDelivery3Serverless, Delivery3Serverless>();
 
 builder.Services.AddDistributedMemoryCache();
